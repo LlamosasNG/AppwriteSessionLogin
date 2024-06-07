@@ -1,12 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
+
 import { StyleSheet, Text, View } from 'react-native';
+import { UserProvider } from './contexts/userContexts';
+import { IdeasProvider } from './contexts/ideasProvider'; // Add import
+import { Router } from './views/router';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <UserProvider>
+      <IdeasProvider> 
+        <Router />
+      </IdeasProvider>
+    </UserProvider >
   );
 }
 
