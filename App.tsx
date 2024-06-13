@@ -1,24 +1,125 @@
-
-import { StyleSheet, Text, View } from 'react-native';
-import { UserProvider } from './contexts/userContexts';
-import { IdeasProvider } from './contexts/ideasProvider'; // Add import
-import { Router } from './views/router';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
+import useAuth from "./hooks/useAuth";
 
 export default function App() {
+  const {
+    loggedInUser,
+    setLoggedInUser,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    name,
+    setName,
+    login,
+    register,
+    handleLogin,
+    account
+  } = useAuth();
+
   return (
-    <UserProvider>
-      <IdeasProvider> 
-        <Router />
-      </IdeasProvider>
-    </UserProvider >
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.titleContainer}>TatApp</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry
+        />
+
+        <TouchableOpacity
+          style={styles.buttonLogin}
+          onPress={() => login(email, password)}
+        >
+          <Text style={styles.textButtonLogin}>Login</Text>
+        </TouchableOpacity>
+
+        <Text>
+          {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
+        </Text>
+
+        {/* <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
+        /> */}
+
+        {/*  <TouchableOpacity
+          style={styles.buttonLogin}
+          onPress={() => register(email, password, name)}
+        >
+          <Text style={styles.textButtonLogin}>Register</Text>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity
+          style={styles.buttonLogin}
+          onPress={async () => {
+            await account.deleteSession("current");
+            setLoggedInUser(null);
+          }}
+        >
+          <Text style={styles.textButtonLogin}>Logout</Text>
+        </TouchableOpacity> 
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#FFF",
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  createAccount: {
+    marginTop: 15,
+    fontSize: 20,
+    textAlign: "center",
+  },
+  buttonLogin: {
+    marginTop: 15,
+    backgroundColor: "#047B9B",
+    paddingVertical: 15,
+    marginHorizontal: 10,
+    borderRadius: 10,
+  },
+  textButtonLogin: {
+    color: "#FFF",
+    textTransform: "uppercase",
+    fontWeight: "900",
+    textAlign: "center",
+    fontSize: 20,
+  },
+  input: {
+    backgroundColor: "#FFFF",
+    padding: 8,
+    borderRadius: 10,
+    borderColor: "828282",
+    borderWidth: 0.5,
+    marginHorizontal: 15,
+    marginVertical: 5,
+    fontSize: 20,
+  },
+  titleContainer: {
+    fontSize: 20,
+    fontWeight: "900",
+    textAlign: "center",
+    marginBottom: 10,
+    marginTop: 50,
   },
 });
