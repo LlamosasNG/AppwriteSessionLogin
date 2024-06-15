@@ -5,12 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
-  Modal,
 } from "react-native";
-import useAuth from "./app/hooks/useAuth";
-import CreateAccount from "./app/components/createAccount";
 
-export default function App() {
+import React from "react";
+import useAuth from "../hooks/useAuth";
+
+export default function CreateAccount() {
   const {
     loggedInUser,
     setLoggedInUser,
@@ -23,8 +23,8 @@ export default function App() {
     login,
     register,
     account,
-    modalVisible,
-    setModalVisible,
+    phone,
+    setPhone,
   } = useAuth();
 
   return (
@@ -33,48 +33,36 @@ export default function App() {
         <Text style={styles.titleContainer}>TatApp</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="NOMBRE"
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="CORREO ELECTRONICO"
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
         <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="CONTRASEÑA"
           value={password}
           onChangeText={(text) => setPassword(text)}
           secureTextEntry
         />
-
+        <TextInput
+          style={styles.input}
+          placeholder="TELEFONO"
+          value={phone}
+          keyboardType="number-pad"
+          maxLength={10}
+          onChangeText={(text) => setPhone(text)}
+        />
         <TouchableOpacity
           style={styles.buttonLogin}
-          onPress={() => login(email, password)}
+          onPress={() => register(email, password, name, phone)}
         >
-          <Text style={styles.textButtonLogin}>INGRESAR</Text>
-        </TouchableOpacity>
-
-        <Text>
-          {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
-        </Text>
-
-        <TouchableOpacity
-          style={styles.buttonLogin}
-          onPress={() => setModalVisible(!modalVisible)}
-        >
-          <Text style={styles.textButtonLogin}>REGISTRATE AQUÍ</Text>
-        </TouchableOpacity>
-
-        <Modal animationType="slide" visible={modalVisible}>
-          <CreateAccount />
-        </Modal>
-
-        <TouchableOpacity
-          style={styles.buttonLogin}
-          onPress={async () => {
-            await account.deleteSession("current");
-            setLoggedInUser(null);
-          }}
-        >
-          <Text style={styles.textButtonLogin}>Logout</Text>
+          <Text style={styles.textButtonRegister}>REGISTRARSE</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -98,7 +86,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 10,
   },
-  textButtonLogin: {
+  textButtonRegister: {
     color: "#FFF",
     textTransform: "uppercase",
     fontWeight: "900",

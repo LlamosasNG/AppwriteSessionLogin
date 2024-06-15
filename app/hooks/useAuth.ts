@@ -15,10 +15,9 @@ export default function useAuth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
+  const [phone, setPhone] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
-
-  function handleLogin() {}
 
   async function login(email: Login["email"], password: Login["password"]) {
     if ([email, password].includes("")) {
@@ -32,13 +31,13 @@ export default function useAuth() {
   async function register(
     email: Register["email"],
     password: Register["password"],
-    name: Register["name"]
+    name: Register["name"],
+    phone: Register["phone"]
   ) {
     await account.create(ID.unique(), email, password, name);
-    await login(email, password);
-    setLoggedInUser(await account.get());
+    await account.updatePhone(phone, password);
   }
-
+  
   return {
     loggedInUser,
     setLoggedInUser,
@@ -48,9 +47,12 @@ export default function useAuth() {
     setPassword,
     name,
     setName,
+    modalVisible,
+    setModalVisible,
     login,
     register,
-    handleLogin,
     account,
+    phone,
+    setPhone,
   };
 }

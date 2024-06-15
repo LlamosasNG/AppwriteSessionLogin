@@ -5,5 +5,6 @@ export type Login = {
 
 export type Register = Login &{
     name: string;
+    phone: string;
   };
   
